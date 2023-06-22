@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "lint",
+			"problemMatcher": [
+				"$eslint-compact",
+				"$eslint-stylish"
+			],
+			"icon": {
+				"id": "checklist",
+				"color": "terminal.ansiYellow"
+			},
+			"label": "Lint",
+			"detail": "Runs ESLint on src files."
+		}
+	]
+}
