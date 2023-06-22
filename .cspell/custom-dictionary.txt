@@ -1,2 +1,8 @@
 # Custom Dictionary Words
 Basemap
+bbox
+lods
+wkid
+WKIDS
+maplibreGL
+JSLayer

@@ -1,13 +1,16 @@
 import { latLng, latLngBounds } from 'leaflet';
 import { request, Support, Util } from 'esri-leaflet';
 
-/*
-  utility to establish a URL for the basemap styles API
-  used primarily by VectorBasemapLayer.js
-*/
+/**
+ * utility to establish a URL for the basemap styles API
+ * used primarily by VectorBasemapLayer.js
+ * @param {string} style - style
+ * @param {string} apikey - API key
+ * @returns {string} - Basemap style URL
+ */
 export function getBasemapStyleUrl (style, apikey) {
   if (style.includes('/')) {
-    throw new Error(style + ' is a v2 style enumeration. Set version:2 to request this style');
+    throw new Error(`${style} is a v2 style enumeration. Set version:2 to request this style`);
   }
 
   let url =
@@ -15,41 +18,57 @@ export function getBasemapStyleUrl (style, apikey) {
     style +
     '?type=style';
   if (apikey) {
-    url = url + '&token=' + apikey;
+    url = `${url}&token=${apikey}`;
   }
   return url;
 }
 
+/**
+ * Creates a basemap style V2 URL.
+ * @param {string} style - vector basemap style
+ * @param {string} apikey - API key
+ * @param {string} language - language
+ * @returns {string} Returns the basemap style V2 URL
+ */
 export function getBasemapStyleV2Url (style, apikey, language) {
   if (style.includes(':')) {
-    throw new Error(style + ' is a v1 style enumeration. Set version:1 to request this style');
+    throw new Error(`${style} is a v1 style enumeration. Set version:1 to request this style`);
   }
 
   let url = 'https://basemapstyles-api.arcgis.com/arcgis/rest/services/styles/v2/styles/';
   if (!(style.startsWith('osm/') || style.startsWith('arcgis/')) && style.length === 32) {
     // style is an itemID
-    url = url + 'items/' + style;
+    url = `${url}items/${style}`;
 
     if (language) {
-      throw new Error('The \'language\' parameter is not supported for custom basemap styles');
+      throw new Error("The 'language' parameter is not supported for custom basemap styles");
     }
   } else {
     url = url + style;
   }
 
   if (apikey) {
-    url = url + '?token=' + apikey;
+    url = `${url}?token=${apikey}`;
 
     if (language) {
-      url = url + '&language=' + language;
+      url = `${url}&language=${language}`;
     }
   }
   return url;
 }
-/*
-  utilities to communicate with custom user styles via an ITEM ID or SERVICE URL
-  used primarily by VectorTileLayer.js
-*/
+
+/**
+ * @typedef TokenOptions
+ * @property {string} [token] - token
+ */
+
+/**
+ * utilities to communicate with custom user styles via an ITEM ID or SERVICE URL
+ * used primarily by VectorTileLayer.js
+ * @param {string} idOrUrl - ID or URL
+ * @param {TokenOptions} [options] - Options
+ * @param {Function} [callback] - callback function
+ */
 export function loadStyle (idOrUrl, options, callback) {
   const httpRegex = /^https?:\/\//;
   const serviceRegex = /\/VectorTileServer\/?$/;
@@ -63,23 +82,38 @@ export function loadStyle (idOrUrl, options, callback) {
   }
 }
 
+/**
+ * Loads a service
+ * @param {string} serviceUrl - Service URL
+ * @param {TokenOptions} [options] - Options
+ * @param {Function} [callback] - callback function
+ */
 export function loadService (serviceUrl, options, callback) {
   const params = options.token ? { token: options.token } : {};
   request(serviceUrl, params, callback);
 }
 
+/**
+ * Loads an item
+ * @param {string} itemId - ID or URL
+ * @param {TokenOptions} [options] - Options
+ * @param {Function} [callback] - callback function
+ */
 function loadItem (itemId, options, callback) {
   const params = options.token ? { token: options.token } : {};
-  const url = options.portalUrl + '/sharing/rest/content/items/' + itemId;
+  const url = `${options.portalUrl}/sharing/rest/content/items/${itemId}`;
   request(url, params, callback);
 }
 
+/**
+ * Load style from item.
+ * @param {string} itemId - item ID
+ * @param {TokenOptions} [options] - Options
+ * @param {Function} [callback] - callback function
+ */
 function loadStyleFromItem (itemId, options, callback) {
   const itemStyleUrl =
-    options.portalUrl +
-    '/sharing/rest/content/items/' +
-    itemId +
-    '/resources/styles/root.json';
+    `${options.portalUrl}/sharing/rest/content/items/${itemId}/resources/styles/root.json`;
 
   loadStyleFromUrl(itemStyleUrl, options, function (error, style) {
     if (error) {
@@ -104,6 +138,12 @@ function loadStyleFromItem (itemId, options, callback) {
   });
 }
 
+/**
+ * Loads a style from a service
+ * @param {string} serviceUrl - Service URL
+ * @param {TokenOptions} [options] - Options
+ * @param {Function} [callback] - callback function
+ */
 function loadStyleFromService (serviceUrl, options, callback) {
   loadService(serviceUrl, options, function (error, service) {
     if (error) {
@@ -121,10 +161,10 @@ function loadStyleFromService (serviceUrl, options, callback) {
     // inadvertently inserting more than 1 adjacent "/" may create invalid paths
     if (service.defaultStyles.charAt(0) === '/') {
       defaultStylesUrl =
-        sanitizedServiceUrl + service.defaultStyles + '/root.json';
+        `${sanitizedServiceUrl + service.defaultStyles}/root.json`;
     } else {
       defaultStylesUrl =
-        sanitizedServiceUrl + '/' + service.defaultStyles + '/root.json';
+        `${sanitizedServiceUrl}/${service.defaultStyles}/root.json`;
     }
 
     loadStyleFromUrl(defaultStylesUrl, options, function (error, style) {
@@ -137,11 +177,34 @@ function loadStyleFromService (serviceUrl, options, callback) {
   });
 }
 
+/**
+ * Loads a style from a URL.
+ * @param {string} styleUrl - Service URL
+ * @param {TokenOptions} [options] - Options
+ * @param {Function} [callback] - callback function
+ */
 function loadStyleFromUrl (styleUrl, options, callback) {
   const params = options.token ? { token: options.token } : {};
   request(styleUrl, params, callback);
 }
 
+/**
+ * @typedef Metadata
+ * @property {Array} tiles - an array of tiles.
+ * @property {number} [minLOD] - Minimum level of detail
+ * @property {object} tileInfo - Tile info
+ * @property {number[]} tileInfo.lods - Tile info
+ * @property {string} [copyrightText] - Copyright text
+ */
+
+/**
+ * Returns a URL with input parameters added to them.
+ * @param {string} style - style
+ * @param {string} styleUrl - style URL
+ * @param {object} metadata - Metadata
+ * @param {string} token - token
+ * @returns {string} Returns a URL with input parameters added to them.
+ */
 export function formatStyle (style, styleUrl, metadata, token) {
   // transforms style object in place and also returns it
 
@@ -176,8 +239,8 @@ export function formatStyle (style, styleUrl, metadata, token) {
     source.url += '?f=json';
 
     // add the token to the source url and tiles properties as a query param
-    source.url += token ? '&token=' + token : '';
-    source.tiles[0] += token ? '?token=' + token : '';
+    source.url += token ? `&token=${token}` : '';
+    source.tiles[0] += token ? `?token=${token}` : '';
     // add minzoom and maxzoom to each source based on the service metadata
     // prefer minLOD/maxLOD if it exists since that is the level that tiles are cooked too
     // MapLibre will overzoom for LODs that are not cooked
@@ -212,7 +275,7 @@ export function formatStyle (style, styleUrl, metadata, token) {
     );
 
     // add the token to the style.sprite property as a query param
-    style.sprite += token ? '?token=' + token : '';
+    style.sprite += token ? `?token=${token}` : '';
   }
 
   if (style.glyphs && style.glyphs.indexOf('http') === -1) {
@@ -223,16 +286,18 @@ export function formatStyle (style, styleUrl, metadata, token) {
     );
 
     // add the token to the style.glyphs property as a query param
-    style.glyphs += token ? '?token=' + token : '';
+    style.glyphs += token ? `?token=${token}` : '';
   }
 
   return style;
 }
 
-/*
-  utility to assist with dynamic attribution data
-  used primarily by VectorBasemapLayer.js
-*/
+/**
+ * utility to assist with dynamic attribution data
+ * used primarily by VectorBasemapLayer.js
+ * @param {string} url - URL
+ * @param {*} map - map
+ */
 export function getAttributionData (url, map) {
   if (Support.cors) {
     request(url, {}, function (error, attributions) {
@@ -268,12 +333,14 @@ export function getAttributionData (url, map) {
   }
 }
 
-/*
-  utility to check if a service's tileInfo spatial reference is in Web Mercator
-  used primarily by VectorTileLayer.js
-*/
 const WEB_MERCATOR_WKIDS = [3857, 102100, 102113];
 
+/**
+ * utility to check if a service's tileInfo spatial reference is in Web Mercator
+ * used primarily by VectorTileLayer.js
+ * @param {number} wkid - Well-known ID (WKID) to be tested.
+ * @returns {boolean} - Returns true if {@link wkid }
+ */
 export function isWebMercator (wkid) {
   return WEB_MERCATOR_WKIDS.indexOf(wkid) >= 0;
 }

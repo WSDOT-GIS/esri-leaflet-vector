@@ -2,11 +2,14 @@ import { Util } from 'esri-leaflet';
 import { getBasemapStyleUrl, getAttributionData, getBasemapStyleV2Url } from './Util';
 import { VectorTileLayer } from './VectorTileLayer';
 
-export var VectorBasemapLayer = VectorTileLayer.extend({
+/**
+ * @class {VectorTileLayer} VectorBasemapLayer
+ * @throws {Error}
+ */
+export const VectorBasemapLayer = VectorTileLayer.extend({
   /**
    * Populates "this.options" to be used in the rest of the module.
-   *
-   * @param {string} key
+   * @param {string} key - Key
    * @param {object} options optional
    */
   initialize: function (key, options) {
@@ -73,7 +76,7 @@ export var VectorBasemapLayer = VectorTileLayer.extend({
         }
       });
 
-      this._map.attributionControl.addAttribution('<span class="">' + allAttributions.join(', ') + '</span>');
+      this._map.attributionControl.addAttribution(`<span class="">${allAttributions.join(', ')}</span>`);
     } else {
       // this is an enum
       if (!this.options.attributionUrls) {
@@ -102,7 +105,8 @@ export var VectorBasemapLayer = VectorTileLayer.extend({
 
   /**
    * Given a key, return the attribution url(s).
-   * @param {string} key
+   * @param {string} key - Key
+   * @returns {[string] | [string, string]} - An array of one or two strings.
    */
   _getAttributionUrls: function (key) {
     if (key.indexOf('OSM:') === 0 || (key.indexOf('osm/') === 0)) {
@@ -156,6 +160,12 @@ export var VectorBasemapLayer = VectorTileLayer.extend({
   }
 });
 
+/**
+ * Creates a new {@link VectorBasemapLayer}
+ * @param {string} key - Key
+ * @param {object} options - Options
+ * @returns {VectorBasemapLayer} - Returns a {@link VectorBasemapLayer}
+ */
 export function vectorBasemapLayer (key, options) {
   return new VectorBasemapLayer(key, options);
 }

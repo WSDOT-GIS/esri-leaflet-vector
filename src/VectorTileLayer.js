@@ -2,7 +2,15 @@ import { Layer, setOptions } from 'leaflet';
 import { loadStyle, formatStyle, isWebMercator } from './Util';
 import { maplibreGLJSLayer } from './MaplibreGLLayer';
 
+/**
+ * @typedef {import('leaflet').LayerOptions} VectorTileLayerOptions
+ * @property {string} [portalUrl='https://www.arcgis.com'] - if portalUrl is not provided, default to ArcGIS Online
+ */
+
 export var VectorTileLayer = Layer.extend({
+  /**
+   * @type {VectorTileLayerOptions}
+   */
   options: {
     // if portalUrl is not provided, default to ArcGIS Online
     portalUrl: 'https://www.arcgis.com'
@@ -10,9 +18,8 @@ export var VectorTileLayer = Layer.extend({
 
   /**
    * Populates "this.options" to be used in the rest of the module and creates the layer instance.
-   *
    * @param {string} key an ITEM ID or SERVICE URL
-   * @param {object} options optional
+   * @param {VectorTileLayerOptions} options optional
    */
   initialize: function (key, options) {
     if (options) {
@@ -141,6 +148,12 @@ export var VectorTileLayer = Layer.extend({
   }
 });
 
+/**
+ * Creates a new {@link VectorTileLayer}
+ * @param {string} key an ITEM ID or SERVICE URL
+ * @param {VectorTileLayerOptions} options optional
+ * @returns {VectorTileLayer} - A vector tile layer
+ */
 export function vectorTileLayer (key, options) {
   return new VectorTileLayer(key, options);
 }

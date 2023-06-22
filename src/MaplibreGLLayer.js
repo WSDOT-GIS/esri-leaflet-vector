@@ -9,7 +9,19 @@ import {
 } from 'leaflet';
 import maplibregl from 'maplibre-gl';
 
+/**
+ * @typedef {object} MaplibreGLJSLayerOptions
+ * @property {number} [updateInterval=32] - Update interval
+ * @property {number} [padding=0.1] - How much to extend the overlay view (relative to map size).
+ * e.g. 0.1 would be 10% of map view in each direction
+ * @property {boolean} [interactive=false] - whether or not to register the mouse and keyboard events on the mapbox overlay
+ * @property {string} [pane='tilePane'] - set the tilepane as the default pane to draw gl tiles
+ */
+
 export const MaplibreGLJSLayer = Layer.extend({
+  /**
+   * @type {MaplibreGLJSLayerOptions}
+   */
   options: {
     updateInterval: 32,
     // How much to extend the overlay view (relative to map size)
@@ -78,7 +90,7 @@ export const MaplibreGLJSLayer = Layer.extend({
   getEvents: function () {
     return {
       move: this._throttledUpdate, // sensibly throttle updating while panning
-      zoomanim: this._animateZoom, // applys the zoom animation to the <canvas>
+      zoomanim: this._animateZoom, // applies the zoom animation to the <canvas>
       zoom: this._pinchZoom, // animate every zoom event for smoother pinch-zooming
       zoomstart: this._zoomStart, // flag starting a zoom to disable panning
       zoomend: this._zoomEnd,
@@ -314,6 +326,11 @@ export const MaplibreGLJSLayer = Layer.extend({
   }
 });
 
+/**
+ * Creates a new {@link: MaplibreGLJSLayer}
+ * @param {MaplibreGLJSLayerOptions} options - options
+ * @returns {MaplibreGLJSLayer} - Maplibre GL JS Layer
+ */
 export function maplibreGLJSLayer (options) {
   return new MaplibreGLJSLayer(options);
 }
