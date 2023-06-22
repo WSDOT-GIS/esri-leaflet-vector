@@ -3,9 +3,10 @@
   "env": {
     "browser": true
   },
-  "extends": "eslint-config-semistandard",
+  "extends": ["eslint-config-semistandard", "plugin:jsdoc/recommended"],
   "plugins": [
-    "chai-friendly"
+    "chai-friendly",
+    "jsdoc"
   ],
   "rules": {
     "no-var": "off",
