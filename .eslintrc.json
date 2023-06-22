@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "env": {
+    "browser": true
+  },
+  "extends": "eslint-config-semistandard",
+  "plugins": [
+    "chai-friendly"
+  ],
+  "rules": {
+    "no-var": "off",
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 2
+  },
+  "globals": {
+    "L": false
+  },
+  "ignorePatterns": [
+    "eslintrc.js",
+    "dist"
+  ]
+}
