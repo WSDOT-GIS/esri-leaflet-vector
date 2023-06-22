@@ -9,7 +9,7 @@ import {
 } from 'leaflet';
 import maplibregl from 'maplibre-gl';
 
-export var MaplibreGLJSLayer = Layer.extend({
+export const MaplibreGLJSLayer = Layer.extend({
   options: {
     updateInterval: 32,
     // How much to extend the overlay view (relative to map size)
@@ -307,7 +307,7 @@ export var MaplibreGLJSLayer = Layer.extend({
 
       // update the map position
       this._glMap.jumpTo({
-        center: center,
+        center,
         zoom: zoom - 1
       });
     }, this);
