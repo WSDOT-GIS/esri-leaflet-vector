@@ -90,7 +90,7 @@
     "prebuild": "mkdirp dist",
     "build": "rollup -c profiles/debug.js & rollup -c profiles/production.js",
     "build-dev": "rollup -c profiles/debug.js",
-    "fix": "semistandard --fix",
+    "fix": "semistandard --fix | snazzy",
     "lint": "eslint src/**/*.js",
     "start-watch": "chokidar src -c \"npm run build\"",
     "start-watch-dev": "chokidar src -c \"npm run build-dev\"",
