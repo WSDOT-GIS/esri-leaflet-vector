@@ -105,7 +105,7 @@ export var VectorTileLayer = Layer.extend({
 
   _createMaplibreLayer: function (style) {
     this._maplibreGL = maplibreGLJSLayer({
-      style: style,
+      style,
       pane: this.options.pane,
       opacity: this.options.opacity
     });

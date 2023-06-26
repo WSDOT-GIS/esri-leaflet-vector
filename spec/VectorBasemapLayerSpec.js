@@ -1,9 +1,10 @@
 /* eslint-env mocha */
+/* eslint-disable new-cap */
 const itemId = '287c07ef752246d08bb4712fd4b74438';
 const apikey = '1234';
 const basemapKey = 'ArcGIS:Streets';
 const basemapKeyV2 = 'arcgis/streets';
-const customBasemap = 'f04f33b9626240f084cb52f0b08758ef'
+const customBasemap = 'f04f33b9626240f084cb52f0b08758ef';
 const language = 'zh_s';
 
 describe('VectorBasemapLayer', function () {
@@ -11,13 +12,13 @@ describe('VectorBasemapLayer', function () {
     console.log('L.esri.Vector.vectorBasemapLayer', L.esri.Vector.vectorBasemapLayer);
 
     expect(L.esri.Vector.vectorBasemapLayer(itemId, {
-      apikey: apikey
+      apikey
     })).to.be.instanceof(L.esri.Vector.VectorBasemapLayer);
   });
 
   it('should save the key from the constructor - itemID', function () {
     const layer = L.esri.Vector.vectorBasemapLayer(itemId, {
-      apikey: apikey
+      apikey
     });
 
     expect(layer.options.key).to.equal(itemId);
@@ -31,7 +32,7 @@ describe('VectorBasemapLayer', function () {
 
   it('should save the key from the constructor - enumeration basemap key', function () {
     const layer = L.esri.Vector.vectorBasemapLayer(basemapKey, {
-      apikey: apikey
+      apikey
     });
 
     expect(layer.options.key).to.equal(basemapKey);
@@ -39,7 +40,7 @@ describe('VectorBasemapLayer', function () {
 
   it('should save the api key from the constructor', function () {
     const layer = L.esri.Vector.vectorBasemapLayer(basemapKey, {
-      apikey: apikey
+      apikey
     });
 
     expect(layer.options.apikey).to.equal(apikey);
@@ -55,59 +56,59 @@ describe('VectorBasemapLayer', function () {
 
   it('should create basemap styles in the \'tilePane\' by default', function () {
     const layer = new L.esri.Vector.vectorBasemapLayer(basemapKey, {
-      apikey: apikey
+      apikey
     });
     const layerV2 = new L.esri.Vector.vectorBasemapLayer(basemapKeyV2, {
-      apikey: apikey,
-      version:2
+      apikey,
+      version: 2
     });
 
     expect(layer.options.pane).to.equal('tilePane');
     expect(layerV2.options.pane).to.equal('tilePane');
-  })
+  });
 
   it('should add \'Labels\' styles to the \'esri-labels\' pane by default', function () {
     const layer = new L.esri.Vector.vectorBasemapLayer('ArcGIS:Imagery:Labels', {
-      apikey: apikey
+      apikey
     });
 
     const layerV2 = new L.esri.Vector.vectorBasemapLayer('arcgis/imagery/labels', {
-      apikey: apikey,
-      version:2
+      apikey,
+      version: 2
     });
 
     // These label styles use a different endpoint (/label instead of /labels, for some reason)
-    const humanGeoLayer = new L.esri.Vector.vectorBasemapLayer('ArcGIS:HumanGeography:Label',{
-      apikey: apikey
+    const humanGeoLayer = new L.esri.Vector.vectorBasemapLayer('ArcGIS:HumanGeography:Label', {
+      apikey
     });
-    const humanGeoLayerV2 = new L.esri.Vector.vectorBasemapLayer('arcgis/human-geography/label',{
-      apikey: apikey,
-      version:2
+    const humanGeoLayerV2 = new L.esri.Vector.vectorBasemapLayer('arcgis/human-geography/label', {
+      apikey,
+      version: 2
     });
 
     expect(layer.options.pane).to.equal('esri-labels');
     expect(layerV2.options.pane).to.equal('esri-labels');
     expect(humanGeoLayer.options.pane).to.equal('esri-labels');
     expect(humanGeoLayerV2.options.pane).to.equal('esri-labels');
-  })
-  
+  });
+
   it('should add \'Detail\' styles to the \'esri-detail\' pane by default', function () {
     const layer = new L.esri.Vector.vectorBasemapLayer('ArcGIS:Terrain:Detail', {
-      apikey: apikey
-    })
+      apikey
+    });
     const layerV2 = new L.esri.Vector.vectorBasemapLayer('arcgis/terrain/detail', {
-      apikey: apikey,
-      version:2
-    })
+      apikey,
+      version: 2
+    });
 
     expect(layer.options.pane).to.equal('esri-detail');
     expect(layerV2.options.pane).to.equal('esri-detail');
-  })
+  });
 
   it('should save the service version from the constructor', function () {
     const layer = new L.esri.Vector.vectorBasemapLayer(basemapKeyV2, {
-      apikey: apikey,
-      version:2
+      apikey,
+      version: 2
     });
 
     expect(layer.options.version).to.equal(2);
@@ -115,26 +116,26 @@ describe('VectorBasemapLayer', function () {
 
   it('should load a v1 basemap from a v1 style key without needing to specify a version', function () {
     const layer = new L.esri.Vector.vectorBasemapLayer(basemapKey, {
-      apikey: apikey
-    })
+      apikey
+    });
 
     expect(layer.options.version).to.equal(1);
   });
 
   it('should load a v2 basemap from a v2 style key without needing to specify a version', function () {
     const layer = new L.esri.Vector.vectorBasemapLayer(basemapKeyV2, {
-      apikey: apikey
-    })
+      apikey
+    });
 
     expect(layer.options.version).to.equal(2);
   });
 
   it('should save the language from the constructor', function () {
     const layer = new L.esri.Vector.vectorBasemapLayer(basemapKeyV2, {
-      apikey: apikey,
-      version:2,
-      language:language
-    })
+      apikey,
+      version: 2,
+      language
+    });
 
     expect(layer.options.language).to.equal(language);
   });
@@ -142,8 +143,8 @@ describe('VectorBasemapLayer', function () {
   it('should error if a language is provided when accessing the v1 service', function () {
     expect(function () {
       L.esri.Vector.vectorBasemapLayer(basemapKey, {
-        apikey:apikey,
-        language:language
+        apikey,
+        language
       });
     }).to.throw('The language parameter is only supported by the basemap styles service v2. Provide a v2 style enumeration to use this option.');
   });
@@ -151,46 +152,46 @@ describe('VectorBasemapLayer', function () {
   it('should not accept a v2 style enumeration when accessing the v1 service', function () {
     expect(function () {
       L.esri.Vector.vectorBasemapLayer(basemapKeyV2, {
-        apikey:apikey,
-        version:1
+        apikey,
+        version: 1
       });
-    }).to.throw(basemapKeyV2 + ' is a v2 style enumeration. Set version:2 to request this style')
-  })
+    }).to.throw(basemapKeyV2 + ' is a v2 style enumeration. Set version:2 to request this style');
+  });
 
   it('should not accept a v1 style enumeration when accessing the v2 service', function () {
     expect(function () {
       L.esri.Vector.vectorBasemapLayer(basemapKey, {
-        apikey:apikey,
-        version:2
+        apikey,
+        version: 2
       });
-    }).to.throw(basemapKey + ' is a v1 style enumeration. Set version:1 to request this style')
-  })
+    }).to.throw(basemapKey + ' is a v1 style enumeration. Set version:1 to request this style');
+  });
 
   it('should load a custom basemap style from an item ID when using the v1 service', function () {
-    const customLayer =  L.esri.Vector.vectorBasemapLayer(customBasemap, {
-      apikey:apikey,
-      version:1
-    })
-    expect(customLayer._maplibreGL.options.style).to.equal(`https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${customBasemap}?type=style&token=${apikey}`)
-  })
+    const customLayer = L.esri.Vector.vectorBasemapLayer(customBasemap, {
+      apikey,
+      version: 1
+    });
+    expect(customLayer._maplibreGL.options.style).to.equal(`https://basemaps-api.arcgis.com/arcgis/rest/services/styles/${customBasemap}?type=style&token=${apikey}`);
+  });
 
   it('should load a custom basemap style from an item ID when using the v2 service', function () {
-    const customLayer =  L.esri.Vector.vectorBasemapLayer(customBasemap, {
-      apikey:apikey,
-      version:2
-    })
-    expect(customLayer._maplibreGL.options.style).to.equal(`https://basemapstyles-api.arcgis.com/arcgis/rest/services/styles/v2/styles/items/${customBasemap}?token=${apikey}`)
-  })
+    const customLayer = L.esri.Vector.vectorBasemapLayer(customBasemap, {
+      apikey,
+      version: 2
+    });
+    expect(customLayer._maplibreGL.options.style).to.equal(`https://basemapstyles-api.arcgis.com/arcgis/rest/services/styles/v2/styles/items/${customBasemap}?token=${apikey}`);
+  });
 
   it('should error if a language is provided when loading a custom basemap style', function () {
     expect(function () {
       L.esri.Vector.vectorBasemapLayer(customBasemap, {
-        apikey,apikey,
-        version:2,
-        language:language
-      })
-    }).to.throw('The \'language\' parameter is not supported for custom basemap styles')
-  })
+        apikey,
+        version: 2,
+        language
+      });
+    }).to.throw('The \'language\' parameter is not supported for custom basemap styles');
+  });
 
   describe('_getAttributionUrls', function () {
     it('should handle OSM keys', function () {

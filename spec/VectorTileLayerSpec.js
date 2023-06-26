@@ -1,3 +1,4 @@
+/* global sinon */
 /* eslint-env mocha */
 
 describe('VectorTileLayer', function () {
@@ -57,7 +58,7 @@ describe('VectorTileLayer', function () {
 
   it('should save the token from the constructor', function () {
     const layer = new L.esri.Vector.VectorTileLayer(itemId, {
-      token: token
+      token
     });
 
     expect(layer.options.token).to.equal(token);
@@ -65,7 +66,7 @@ describe('VectorTileLayer', function () {
 
   it('should save the api key as token from the constructor', function () {
     const layer = L.esri.Vector.vectorTileLayer(itemId, {
-      apikey: apikey
+      apikey
     });
 
     expect(layer.options.token).to.equal(apikey);
@@ -141,6 +142,7 @@ describe('VectorTileLayer', function () {
       })
     );
 
+    /* eslint-disable-next-line new-cap */
     const layer = new L.esri.Vector.vectorTileLayer(
       '75f4dfdff19e445395653121a95a85db_WRONG',
       {
@@ -168,6 +170,7 @@ describe('VectorTileLayer', function () {
       })
     );
 
+    /* eslint-disable-next-line new-cap */
     const layer = new L.esri.Vector.vectorTileLayer(
       'https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Microsoft_Building_Footprints_WRONG/VectorTileServer'
     );
