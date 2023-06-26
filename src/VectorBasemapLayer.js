@@ -3,7 +3,7 @@ import { getBasemapStyleUrl, getAttributionData, getBasemapStyleV2Url } from './
 import { VectorTileLayer } from './VectorTileLayer';
 
 /**
- * @class {VectorTileLayer} VectorBasemapLayer
+ * @augments VectorTileLayer
  * @throws {Error}
  */
 export const VectorBasemapLayer = VectorTileLayer.extend({
@@ -11,6 +11,7 @@ export const VectorBasemapLayer = VectorTileLayer.extend({
    * Populates "this.options" to be used in the rest of the module.
    * @param {string} key - Key
    * @param {object} options optional
+   * @constructs
    */
   initialize: function (key, options) {
     // Default to the v1 service endpoint
